@@ -5,14 +5,16 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Date.*;
 
 @Data
 @AllArgsConstructor
 public class Employee {
 
-    @NotEmpty(message = "Enter your name")
+    @NotEmpty(message = "Enter your ID")
     @Size(min = 2 , message = "ID must be longer than 2 characters")
     private String ID;
 
@@ -46,13 +48,15 @@ public class Employee {
     @AssertFalse(message = "onLeave must be initially set to false")
     private boolean onLeave;
 
-    @NotNull(message = "cannot be empty")
-    @PastOrPresent(message = "hire date must be past or present date")
+    @NotNull(message = "hire date cannot be empty")
+    @PastOrPresent(message = "hire date must be in the past or present date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date hireDate;
+    private LocalDate hireDate;
 
     @NotNull(message = "Annual leave cannot be empty")
     @Positive(message = "Positive only")
     private int annualLeave;
+
+
 
 }
