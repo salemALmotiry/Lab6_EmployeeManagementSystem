@@ -35,7 +35,7 @@ public class Employee {
             "e.g 0505330609")
     private String phoneNumber;
 
-    @NotNull(message = "Enter your name")
+    @NotNull(message = "Enter your age")
     @Positive(message = "Positive only")
     @Range(min = 25,max = 75 , message = "age must be between 25 and 75 ")
     private int age;
