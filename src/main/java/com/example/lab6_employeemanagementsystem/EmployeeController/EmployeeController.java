@@ -4,6 +4,7 @@ package com.example.lab6_employeemanagementsystem.EmployeeController;
 import com.example.lab6_employeemanagementsystem.ApiResponse.ApiResponse;
 import com.example.lab6_employeemanagementsystem.Model.Employee;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -93,7 +94,6 @@ public class EmployeeController {
     }
 
 
-
     @GetMapping("/employee-by-age/{minAge}/{maxAge}")
     public ResponseEntity getEmployeeByAgeRange(@PathVariable  int minAge,@PathVariable int maxAge){
 
@@ -108,7 +108,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/leave-Request/{id}")
-    public ResponseEntity leaveRequest(@PathVariable String id){
+    public ResponseEntity leaveRequest(@PathVariable  String id){
 
         for (Employee employee : employees){
 
@@ -140,5 +140,25 @@ public class EmployeeController {
         return ResponseEntity.status(200).body(tem);
     }
 
+    @PutMapping("/promote-employee/{id}/{target_id}")
+    public ResponseEntity promoteEmployee(@PathVariable String id,@PathVariable String target_id){
+
+        for (Employee supervisor : employees) {
+
+            if (supervisor.getID().equalsIgnoreCase(id) && supervisor.getPosition().equalsIgnoreCase("supervisor")) {
+
+                for (Employee coordinator : employees) {
+
+                    if (coordinator.getID().equalsIgnoreCase(target_id) && !coordinator.isOnLeave() && coordinator.getAge() >= 30) {
+                        coordinator.setPosition("supervisor");
+                        return ResponseEntity.status(200).body(new ApiResponse("Requested was approve. " + coordinator.getName() + " has been promoted"));
+                    }
+                }
+            }
+        }
+
+
+        return ResponseEntity.status(200).body(new ApiResponse("Requested was rejected. Contact with your admin"));
+    }
 
 }
